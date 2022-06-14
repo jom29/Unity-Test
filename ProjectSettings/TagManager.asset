@@ -5,11 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - gems
+  - patrol
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - patrol_layer
   - Water
   - UI
   - 
