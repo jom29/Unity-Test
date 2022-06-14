@@ -13,9 +13,10 @@ public class ScoreManager : MonoBehaviour
         score_text = GameObject.Find("PlayerScore UI").GetComponent<Text>();    
     }
 
-    public void AddScore (int score)
+    public void UpdateScore ()
     {
-        score_text.text = "SCORE: " + score + " points";
+        score_text.text = "SCORE: " + playerScore + " points";
+
     }
 
 }

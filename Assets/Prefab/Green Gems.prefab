@@ -93,6 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 945719071627645545}
   - component: {fileID: 7729184852888495145}
+  - component: {fileID: 3521966498921514699}
   m_Layer: 0
   m_Name: Green Gems
   m_TagString: gems
@@ -129,3 +130,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 20
+  carMaterial: {fileID: 2100000, guid: f2b20ec4d7de6564fa88f4b6c47473c8, type: 2}
+--- !u!135 &3521966498921514699
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456005751792322771}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 100
+  m_Center: {x: 0, y: 50, z: 0}

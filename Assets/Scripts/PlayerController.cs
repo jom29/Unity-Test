@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    
     public PlayerInput playerInput;
     private CharacterController controller;
     private Vector3 playerVelocity;
@@ -14,22 +15,30 @@ public class PlayerController : MonoBehaviour
     private float jumpHeight = 1.0f;
     private float gravityValue = -9.81f;
 
+    public GameObject[] gems;
+
 
     void Start()
     {
         controller = gameObject.AddComponent<CharacterController>();
+        gems = GameObject.FindGameObjectsWithTag("gems");
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void Update()
+    {
+        MovementController();
+    }
+
+
+
+
+
+
+    void MovementController()
     {
 
         Vector2 left_stick = playerInput.actions["MoveAction"].ReadValue<Vector2>();
-
-
-
-
-
 
 
 
