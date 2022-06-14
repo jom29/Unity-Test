@@ -6,7 +6,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    
+
+    public Material defaultSkin;
     public PlayerInput playerInput;
     private CharacterController controller;
     private Vector3 playerVelocity;
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
     {
         controller = gameObject.AddComponent<CharacterController>();
         gems = GameObject.FindGameObjectsWithTag("gems");
+        defaultSkin.color = Color.grey;
     }
 
 

@@ -1288,6 +1288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec15584ebf8953a49a7b2d30c094febc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultSkin: {fileID: 2100000, guid: f2b20ec4d7de6564fa88f4b6c47473c8, type: 2}
   playerInput: {fileID: 1647998761}
   playerSpeed: 10
   gems: []
