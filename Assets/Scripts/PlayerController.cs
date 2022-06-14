@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 
 public class PlayerController : MonoBehaviour
 {
+    public PlayerInput playerInput;
     private CharacterController controller;
     private Vector3 playerVelocity;
     private bool groundedPlayer;
@@ -20,13 +23,28 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        Vector2 left_stick = playerInput.actions["MoveAction"].ReadValue<Vector2>();
+
+
+
+
+
+
+
+
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0)
         {
             playerVelocity.y = 0f;
         }
 
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        // Vector3 move = new Vector3(left_stick.x , 0, left_stick.y);
+        Vector3 move = new Vector3(left_stick.x + Input.GetAxis("Horizontal"), 0, left_stick.y + Input.GetAxis("Vertical"));
+
+
+
+
         controller.Move(move * Time.deltaTime * playerSpeed);
 
         if (move != Vector3.zero)
