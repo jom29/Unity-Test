@@ -21,10 +21,13 @@ public class PlayerController : MonoBehaviour
     private float gravityValue = -9.81f;
 
     public GameObject[] gems;
-
+    private GameObject[] enemies;
+    public bool someAI_chasingPlayer;
 
     void Start()
     {
+        enemies = GameObject.FindGameObjectsWithTag("enemy");
+
         instance = this;
         controller = gameObject.AddComponent<CharacterController>();
         gems = GameObject.FindGameObjectsWithTag("gems");
@@ -73,8 +76,45 @@ public class PlayerController : MonoBehaviour
         if (move != Vector3.zero)
         {
             gameObject.transform.forward = move;
-            CarTransform.localEulerAngles = new Vector3(0, 180, 0);
         }
+
+
+
+        // AI[] all_enemies = (AI)FindObjectsOfType(typeof(AI));
+        // TextMesh texture = (TextMesh)FindObjectOfType(typeof(TextMesh));
+
+        
+
+        #region WHEN THE AI IS FAR AWAY FROM THE PLAYER  THEN RESET THE CAR LOCAL TRANSFORM
+        foreach (GameObject enemy in enemies)
+            {
+
+               //CHECK WHEN AI SCRIPT IS NOT DESTROY
+               if(enemy.GetComponent<AI>() != null)
+               {
+                   if (enemy != null && enemy.GetComponent<AI>().chasing == true)
+                   {
+                      float dist = Vector3.Distance(transform.position, enemy.GetComponent<Transform>().position);
+                      if (dist > 3)
+                      {
+                        CarTransform.localEulerAngles = new Vector3(0, 180, 0);
+                      }
+                   }
+
+                   if (enemy == null)
+                   {
+                    Destroy(enemy);
+                   }
+               }
+               
+            }
+            #endregion
+        
+
+
+
+
+
 
         // Changes the height position of the player..
         if (Input.GetButtonDown("Jump") && groundedPlayer)

@@ -25,20 +25,29 @@ public class Points : MonoBehaviour
                 score_manager.playerScore += score;
                 score_manager.UpdateScore();
 
-                switch(gameObject.name)
+                switch(gameObject.GetComponent<gemsID>().color)
                 {
-                    case "Red Gems":
+                    case "red":
                         carMaterial.color = Color.red;
                     break;
 
-                    case "Green Gems":
+                    case "green":
                         carMaterial.color = Color.green;
                     break;
 
-                    case "Blue Gems":
+                    case "blue":
                         carMaterial.color = Color.blue;
                     break;
                 }
+
+                
+            }
+
+            RespawnManager respawn_script = (RespawnManager)FindObjectOfType(typeof(RespawnManager));
+
+            if(respawn_script != null)
+            {
+                respawn_script.Reswpawn();
             }
             Destroy(gameObject,0.1f);
         }

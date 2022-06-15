@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3123444668785294027}
   - component: {fileID: 7411892136331447265}
   - component: {fileID: 8763977525860319932}
+  - component: {fileID: 4274214848357051837}
   m_Layer: 0
   m_Name: Red Gems
   m_TagString: gems
@@ -61,6 +62,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 100
   m_Center: {x: 0, y: 50, z: 0}
+--- !u!114 &4274214848357051837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2311301862117646449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0252dfb6b7d112f47893060b190fb049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: red
 --- !u!1 &2668436114777864307
 GameObject:
   m_ObjectHideFlags: 0

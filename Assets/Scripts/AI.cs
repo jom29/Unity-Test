@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class AI : MonoBehaviour
 {
+    public GameObject smoke;
     public bool obstacle;
     public float speed = 2;
     public bool chasing;
@@ -60,16 +61,10 @@ public class AI : MonoBehaviour
         }
     }
 
-
- 
-    IEnumerator reset_obstacle()
+    public void ChangeToBlack()
     {
-        yield return new WaitForSeconds(2);
-        obstacle = false;
-        GetComponent<MeshRenderer>().material.color = Color.green;
+        GetComponent<MeshRenderer>().material.color = Color.black;
     }
-
-
 
     void Update()
     {
@@ -77,11 +72,17 @@ public class AI : MonoBehaviour
         Raycast();
 
 
-        //GET THE DISTANCE BETWEEN AI AND THE TARGET (PLAYER)
-        if(target != null)
+        #region CHASING PLAYER
+        if (target != null)
         {
             distance = Vector3.Distance(transform.position, target.position);
 
+            if(distance < 3 && chasing == false)
+            {
+                GetComponent<MeshRenderer>().material.color = Color.blue;
+                chasing = true;
+                StartCoroutine(reset_chasing());
+            }
 
             //CALL DISTANCE ONLY WHEN AI IS CHASING PLAYER
             if(chasing == true)
@@ -115,10 +116,9 @@ public class AI : MonoBehaviour
 
 
                     //SHAKE THE CAR
-                    if(ScoreManager.instance.playerScore > 0)
-                    {
-                        GameObject.Find("Car").GetComponent<Transform>().localEulerAngles = new Vector3(Random.Range(-5, 5), 180, Random.Range(-10, 10));
-                    }
+                  
+                     GameObject.Find("Car").GetComponent<Transform>().localEulerAngles = new Vector3(Random.Range(-5, 5), 180, Random.Range(-10, 10));
+                    
 
                     //PLAYER LOSE
                     if(PlayerController.instance != null && 
@@ -141,9 +141,12 @@ public class AI : MonoBehaviour
         {
             chasing = false;
         }
-        
+        #endregion
 
-        for(int i = 0; i < patrol_positions.Length; i++)
+
+
+        //AI PATROLLING
+        for (int i = 0; i < patrol_positions.Length; i++)
         {
             if(patrol_positions[i] != null && i == patrol_id && chasing == false && delayTime == false)
             {
@@ -172,11 +175,30 @@ public class AI : MonoBehaviour
     }
 
 
+
+
+
+    #region IENUMERATOR
+    IEnumerator reset_chasing()
+    {
+        yield return new WaitForSeconds(Random.Range(5,10));
+        chasing = false;
+        GetComponent<MeshRenderer>().material.color = Color.green;
+    }
+
+
+    IEnumerator reset_obstacle()
+    {
+        yield return new WaitForSeconds(2);
+        obstacle = false;
+        GetComponent<MeshRenderer>().material.color = Color.green;
+    }
+
     IEnumerator delayTimer()
     {
         yield return new WaitForSeconds(2);
         delayTime = false;
     }
-
+    #endregion
 
 }
