@@ -15,6 +15,13 @@ public class Points : MonoBehaviour
 
             if(score_manager != null)
             {
+                //TO DETERMINE IF THE PLAYER IS ALREADY EARN GEMS WHEN IT START THE GAME
+                //IT WILL BE A GO SIGNAL FROM AI
+                if(PlayerController.instance.earnedGems == false)
+                {
+                    PlayerController.instance.earnedGems = true;
+                }
+
                 score_manager.playerScore += score;
                 score_manager.UpdateScore();
 
@@ -32,23 +39,6 @@ public class Points : MonoBehaviour
                         carMaterial.color = Color.blue;
                     break;
                 }
-
-
-                /*
-                 * switch (variable/expression)
-{
-    case value1:
-        // Statements executed if expression(or variable) = value1
-        break;
-    case value2:
-        // Statements executed if expression(or variable) = value1
-        break;
-    ... ... ... 
-    ... ... ... 
-    default:
-        // Statements executed if no case matches
-}
-                */
             }
             Destroy(gameObject,0.1f);
         }

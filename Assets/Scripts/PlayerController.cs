@@ -6,9 +6,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-
+    public static PlayerController instance;
+    public bool isPlayerLose;
+    public bool earnedGems;
+    public GameObject smoke;
     public Material defaultSkin;
     public PlayerInput playerInput;
+    public Transform CarTransform;
     private CharacterController controller;
     private Vector3 playerVelocity;
     private bool groundedPlayer;
@@ -21,9 +25,17 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        instance = this;
         controller = gameObject.AddComponent<CharacterController>();
         gems = GameObject.FindGameObjectsWithTag("gems");
         defaultSkin.color = Color.grey;
+
+
+        if(CarTransform == null)
+        {
+            GameObject carGO = GameObject.Find("Car");
+            CarTransform = carGO.GetComponent<Transform>();
+        }
     }
 
 
@@ -61,6 +73,7 @@ public class PlayerController : MonoBehaviour
         if (move != Vector3.zero)
         {
             gameObject.transform.forward = move;
+            CarTransform.localEulerAngles = new Vector3(0, 180, 0);
         }
 
         // Changes the height position of the player..

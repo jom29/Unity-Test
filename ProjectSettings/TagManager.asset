@@ -6,6 +6,7 @@ TagManager:
   tags:
   - gems
   - patrol
+  - enemy
   layers:
   - Default
   - TransparentFX

@@ -7,9 +7,12 @@ public class ScoreManager : MonoBehaviour
 {
     private Text score_text;
     public int playerScore;
+    public static ScoreManager instance;
+
 
     private void Start()
     {
+        instance = this;
         score_text = GameObject.Find("PlayerScore UI").GetComponent<Text>();    
     }
 
