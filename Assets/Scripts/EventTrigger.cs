@@ -38,7 +38,7 @@ public class EventTrigger : MonoBehaviour
     {
         //  Debug.Log("Awake:" + SceneManager.GetActiveScene().name);
         yield return new WaitUntil(() => player_script.isPlayerLose == true && SceneManager.GetActiveScene().name.Equals("SampleScene") || 
-                                         TimerEvent.instance.seconds_int.Equals(0) && SceneManager.GetActiveScene().name.Equals("SampleScene"));
+                                         (TimerEvent.instance.seconds_int + TimerEvent.instance.minutes_int).Equals(0)  && SceneManager.GetActiveScene().name.Equals("SampleScene"));
 
         //SHOW THE PANEL WHEN PLAYER IS LOSE
         eventPanel.SetActive(true);
@@ -105,6 +105,7 @@ public class EventTrigger : MonoBehaviour
         //DISABLE AI AND OTHER COMPONENT
         foreach(GameObject enemy in enemies)
         {
+            enemy.GetComponent<AI>().AnimateIdle();
             enemy.GetComponent<AI>().ChangeToBlack();
             enemy.GetComponent<AI>().smoke.SetActive(true);
             Destroy(enemy.GetComponent<AI>());

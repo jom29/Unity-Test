@@ -6,6 +6,18 @@ using UnityEngine.UI;
 
 public class AI : MonoBehaviour
 {
+
+    #region ANIMATION
+    [Header("ANIMATION PROPERTIES")]
+    public Animator anim;
+    private const string IDLE_ANIMATION_BOOL = "idle";
+    private const string RUN_ANIMATION_BOOL = "run";
+    private const string ATTACK_BOOL = "attack";
+    [Space(10)]
+    #endregion
+
+
+
     public GameObject smoke;
     public bool obstacle;
     public float speed = 2;
@@ -23,6 +35,9 @@ public class AI : MonoBehaviour
 
     void Start()
     {
+        anim = anim.GetComponent<Animator>();
+
+
         GetComponent<MeshRenderer>().material.color = Color.green;
 
         patrol_positions = GameObject.FindGameObjectsWithTag("patrol");
@@ -49,7 +64,7 @@ public class AI : MonoBehaviour
             {
                 float dist = Vector3.Distance(transform.position, hit.collider.gameObject.GetComponent<Transform>().position);
 
-                if(hit.collider.tag == "enemy" && dist < 3)
+                if(hit.collider.tag == "enemy" && dist < 5)
                 {
                     obstacle = true;
                     GetComponent<MeshRenderer>().material.color = Color.red;
@@ -77,7 +92,7 @@ public class AI : MonoBehaviour
         {
             distance = Vector3.Distance(transform.position, target.position);
 
-            if(distance < 3 && chasing == false && TimerEvent.instance.seconds_int != 0)
+            if(distance < 5 && chasing == false && TimerEvent.instance.seconds_int != 0)
             {
                 GetComponent<MeshRenderer>().material.color = Color.blue;
                 chasing = true;
@@ -86,7 +101,7 @@ public class AI : MonoBehaviour
 
 
             //SET CHASING TO FALSE WHEN TIMER IS RUNNING OUT
-            if(TimerEvent.instance.seconds_int == 0 && chasing == true)
+            if((TimerEvent.instance.seconds_int + TimerEvent.instance.minutes_int).Equals(0) && chasing == true)
             {
                 chasing = false;
             }
@@ -106,30 +121,32 @@ public class AI : MonoBehaviour
                 {
                     transform.Translate(Vector3.forward * speed);
                     transform.GetComponent<Rigidbody>().MovePosition(transform.position);
-
-                    GameObject.Find("DebugText").GetComponent<Text>().text = "Player Distance: " + distance.ToString("#,###,###.####");
-
+                    AnimateRun();
+                  
                 }
 
                 else
                 {
-                    GameObject.Find("DebugText").GetComponent<Text>().text = "I chase you!";
+                  
 
                     if(ScoreManager.instance.playerScore >= 1 && Time.time > nextFire)
                     {
                         ScoreManager.instance.playerScore--;
                         ScoreManager.instance.UpdateScore();
                         nextFire = Time.time + fireRate;
+                        
                     }
 
 
                     //SHAKE THE CAR
                   
                      GameObject.Find("Car").GetComponent<Transform>().localEulerAngles = new Vector3(Random.Range(-5, 5), 180, Random.Range(-10, 10));
-                    
+                    AnimateAttack();
+
+
 
                     //PLAYER LOSE
-                    if(PlayerController.instance != null && 
+                    if (PlayerController.instance != null && 
                        PlayerController.instance.earnedGems == true &&
                        ScoreManager.instance.playerScore == 0)
                     {
@@ -164,11 +181,12 @@ public class AI : MonoBehaviour
                 Debug.DrawLine(transform.position, patrol_positions[i].GetComponent<Transform>().position, Color.red);
 
                 distance = Vector3.Distance(transform.position, patrol_positions[i].GetComponent<Transform>().position);
-                GameObject.Find("DebugText").GetComponent<Text>().text = "Patrol Distance: " + distance.ToString("#,###,###.####");
+            
 
                 if(distance > 2 && obstacle == false)
                 {
                    transform.Translate(Vector3.forward * speed);
+                    AnimateRun();
                 }
 
                 else
@@ -176,14 +194,12 @@ public class AI : MonoBehaviour
                     patrol_id = Random.Range(0, patrol_positions.Length);
                     delayTime = true;
                     StartCoroutine(delayTimer());
+                    AnimateIdle();
                 }
             }
         }
         
     }
-
-
-
 
 
     #region IENUMERATOR
@@ -192,6 +208,7 @@ public class AI : MonoBehaviour
         yield return new WaitForSeconds(Random.Range(5,10));
         chasing = false;
         GetComponent<MeshRenderer>().material.color = Color.green;
+        AnimateIdle();
     }
 
 
@@ -206,6 +223,44 @@ public class AI : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         delayTime = false;
+    }
+    #endregion
+
+
+    #region ANIMATIONS
+    public void AnimateIdle()
+    {
+        Animate(IDLE_ANIMATION_BOOL);
+    }
+
+    public void AnimateRun()
+    {
+        Animate(RUN_ANIMATION_BOOL);
+    }
+
+
+    public void AnimateAttack()
+    {
+        Animate(ATTACK_BOOL);
+    }
+
+
+    private void Animate(string boolName)
+    {
+        DisableOtherAnimations(anim, boolName);
+        anim.SetBool(boolName, true);
+    }
+
+
+    private void DisableOtherAnimations(Animator animator, string animation)
+    {
+        foreach (AnimatorControllerParameter parameter in animator.parameters)
+        {
+            if (parameter.name != animation)
+            {
+                animator.SetBool(parameter.name, false);
+            }
+        }
     }
     #endregion
 
