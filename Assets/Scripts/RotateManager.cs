@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class RotateManager : MonoBehaviour
 {
+    public static RotateManager instance;
     public GameObject[] gems;
     public float speed = 0.1f;
 
     private void Start()
+    {
+        instance = this;
+        gems = GameObject.FindGameObjectsWithTag("gems");
+    }
+
+
+    public void UpdateTags()
     {
         gems = GameObject.FindGameObjectsWithTag("gems");
     }

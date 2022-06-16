@@ -48,6 +48,7 @@ public class Points : MonoBehaviour
             if(respawn_script != null)
             {
                 respawn_script.Reswpawn();
+                RotateManager.instance.UpdateTags();
             }
             Destroy(gameObject,0.1f);
         }
