@@ -58,36 +58,66 @@ public class PlayerController : MonoBehaviour
 
     void MovementController()
     {
-
+        //INPUTS -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         Vector2 left_stick = playerInput.actions["MoveAction"].ReadValue<Vector2>();
 
+        Vector3 move = new Vector3(left_stick.x + Input.GetAxis("Horizontal"), 0, left_stick.y + Input.GetAxis("Vertical"));
+        //=================================================================================================================================================================================INPUTS (ENDLINE)
 
 
+
+        //GRAVITY---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         groundedPlayer = controller.isGrounded;
+
         if (groundedPlayer && playerVelocity.y < 0)
         {
             playerVelocity.y = 0f;
         }
-
-        // Vector3 move = new Vector3(left_stick.x , 0, left_stick.y);
-        Vector3 move = new Vector3(left_stick.x + Input.GetAxis("Horizontal"), 0, left_stick.y + Input.GetAxis("Vertical"));
+        //==================================================================================================================================================================================GRAVITY (ENDLINE)
 
 
 
 
+
+        //WHEN CAR IS MOVING ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
         controller.Move(move * Time.deltaTime * playerSpeed);
 
         if (move != Vector3.zero)
         {
             gameObject.transform.forward = move;
+
+            if (!SoundManager.instance.source[1].isPlaying)
+            {
+                SoundManager.instance.PlaySound(1);
+            }
         }
+        //==========================================================================================================================================================================WHEN CAR IS MOVING (ENDLINE)
 
 
 
-        // AI[] all_enemies = (AI)FindObjectsOfType(typeof(AI));
-        // TextMesh texture = (TextMesh)FindObjectOfType(typeof(TextMesh));
+
+
+
+        //WHEN CAR IS IN IDLE --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        if(move == Vector3.zero)
+        {
+            if (SoundManager.instance.source[1].isPlaying)
+            {
+                SoundManager.instance.Stop(1);
+            }
+
+            if(!SoundManager.instance.source[2].isPlaying)
+            {
+                SoundManager.instance.PlaySound(2);
+            }
+        }
+        //==========================================================================================================================================================================WHEN CAR IS IN IDLE (ENDLINE)
 
         
+
+
+
+
 
         #region WHEN THE AI IS FAR AWAY FROM THE PLAYER  THEN RESET THE CAR LOCAL TRANSFORM
         foreach (GameObject enemy in enemies)
@@ -114,11 +144,6 @@ public class PlayerController : MonoBehaviour
             }
             #endregion
         
-
-
-
-
-
 
         // Changes the height position of the player..
         if (Input.GetButtonDown("Jump") && groundedPlayer)

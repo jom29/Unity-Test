@@ -11,6 +11,7 @@ public class Points : MonoBehaviour
     {
         if(other.tag == "Player")
         {
+            SoundManager.instance.PlaySound(0);
             ScoreManager score_manager = (ScoreManager)FindObjectOfType(typeof(ScoreManager));
 
             if(score_manager != null)

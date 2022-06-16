@@ -40,6 +40,10 @@ public class EventTrigger : MonoBehaviour
         yield return new WaitUntil(() => player_script.isPlayerLose == true && SceneManager.GetActiveScene().name.Equals("SampleScene") || 
                                          (TimerEvent.instance.seconds_int + TimerEvent.instance.minutes_int).Equals(0)  && SceneManager.GetActiveScene().name.Equals("SampleScene"));
 
+
+        SoundManager.instance.StopAllSounds();
+
+
         //SHOW THE PANEL WHEN PLAYER IS LOSE
         eventPanel.SetActive(true);
 
@@ -95,6 +99,9 @@ public class EventTrigger : MonoBehaviour
     {
         yield return new WaitUntil(() => ScoreManager.instance.playerScore > 100 && SceneManager.GetActiveScene().name.Equals("SampleScene"));
 
+        SoundManager.instance.StopAllSounds();
+
+
         //PAUSE TIME WHEN PLAYER WIN
         TimerEvent.instance.pauseTime = true;
 
@@ -113,5 +120,6 @@ public class EventTrigger : MonoBehaviour
             Destroy(enemy.GetComponent<Rigidbody>());
             player_script.enabled = false;
         }
+        
     }
 }
