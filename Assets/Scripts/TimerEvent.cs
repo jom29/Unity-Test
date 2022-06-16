@@ -13,7 +13,7 @@ public class TimerEvent : MonoBehaviour
     public int seconds_int;
 
 
-    private void Start()
+    private void Awake()
     {
         instance = this;
         timerCounts();
@@ -26,7 +26,11 @@ public class TimerEvent : MonoBehaviour
         if (timeRemaining > 0 && pauseTime.Equals(false))
         {
             timeRemaining -= Time.deltaTime;
-            GameObject.Find("Timer Text").GetComponent<Text>().text =  minutes_int.ToString()  + ": " +   seconds_int.ToString(); //string. Format
+
+            if(GameObject.Find("Timer Text") != null)
+            {
+                GameObject.Find("Timer Text").GetComponent<Text>().text = minutes_int.ToString() + ": " + seconds_int.ToString(); 
+            }
         }
     }
 

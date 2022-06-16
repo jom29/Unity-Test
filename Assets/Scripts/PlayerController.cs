@@ -24,11 +24,15 @@ public class PlayerController : MonoBehaviour
     private GameObject[] enemies;
     public bool someAI_chasingPlayer;
 
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         enemies = GameObject.FindGameObjectsWithTag("enemy");
-
-        instance = this;
         controller = gameObject.AddComponent<CharacterController>();
         gems = GameObject.FindGameObjectsWithTag("gems");
         defaultSkin.color = Color.grey;

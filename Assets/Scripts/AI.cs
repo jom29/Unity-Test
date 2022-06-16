@@ -77,12 +77,20 @@ public class AI : MonoBehaviour
         {
             distance = Vector3.Distance(transform.position, target.position);
 
-            if(distance < 3 && chasing == false)
+            if(distance < 3 && chasing == false && TimerEvent.instance.seconds_int != 0)
             {
                 GetComponent<MeshRenderer>().material.color = Color.blue;
                 chasing = true;
                 StartCoroutine(reset_chasing());
             }
+
+
+            //SET CHASING TO FALSE WHEN TIMER IS RUNNING OUT
+            if(TimerEvent.instance.seconds_int == 0 && chasing == true)
+            {
+                chasing = false;
+            }
+
 
             //CALL DISTANCE ONLY WHEN AI IS CHASING PLAYER
             if(chasing == true)

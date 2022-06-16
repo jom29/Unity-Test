@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System;
 
 public class EventTrigger : MonoBehaviour
 {
@@ -14,16 +16,40 @@ public class EventTrigger : MonoBehaviour
     private void Start()
     {
         enemies = GameObject.FindGameObjectsWithTag("enemy");
-        StartCoroutine(WhenPlayerLose());
+       
+        try
+        {
+            StartCoroutine(WhenPlayerLose());
+        }
+
+        catch (Exception x)
+        {
+            Debug.LogError("Log Error Found: " + x.ToString());
+        }
+     
+
+
+
         StartCoroutine(WhenPlayerWin());
+        
     }
 
     IEnumerator WhenPlayerLose()
     {
-        yield return new WaitUntil(() => player_script.isPlayerLose == true || TimerEvent.instance.seconds_int.Equals(0));
+        //  Debug.Log("Awake:" + SceneManager.GetActiveScene().name);
+        yield return new WaitUntil(() => player_script.isPlayerLose == true && SceneManager.GetActiveScene().name.Equals("SampleScene") || 
+                                         TimerEvent.instance.seconds_int.Equals(0) && SceneManager.GetActiveScene().name.Equals("SampleScene"));
 
         //SHOW THE PANEL WHEN PLAYER IS LOSE
         eventPanel.SetActive(true);
+
+
+
+        if(eventPanel.activeInHierarchy == true)
+       
+
+
+
         eventText.text = "Game Over";
 
         if(TimerEvent.instance.seconds_int.Equals(0))
@@ -33,12 +59,32 @@ public class EventTrigger : MonoBehaviour
             PlayerController.instance.enabled = false;
         }
 
-        GameObject.Find("LeftJoystick").SetActive(false);
+        if(GameObject.Find("LeftJoystick") != null)
+        {
+            GameObject.Find("LeftJoystick").SetActive(false);
+        }
+
+        else
+        {
+            Debug.LogError("LeftJoystick not found");
+        }
+
+
+
+
+
+       
+        if(GameObject.Find("InGame Btn"))
+        {
+            GameObject.Find("InGame Btn").SetActive(false);
+        }
+
+        else
+        {
+            Debug.LogError("InGame Btn not Found");
+        }
+       
     }
-
-
-
-
 
 
 
@@ -47,7 +93,7 @@ public class EventTrigger : MonoBehaviour
 
     IEnumerator WhenPlayerWin()
     {
-        yield return new WaitUntil(() => ScoreManager.instance.playerScore > 100);
+        yield return new WaitUntil(() => ScoreManager.instance.playerScore > 100 && SceneManager.GetActiveScene().name.Equals("SampleScene"));
 
         //PAUSE TIME WHEN PLAYER WIN
         TimerEvent.instance.pauseTime = true;
