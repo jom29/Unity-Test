@@ -25,6 +25,7 @@ public class AI : MonoBehaviour
     private GameObject[] patrol_positions;
     private Transform target;
     private float distance;
+    public int near = 0; // zero when near to player (need to use as marker)
     private int patrol_id;
     private bool delayTime;
 
@@ -32,7 +33,10 @@ public class AI : MonoBehaviour
     public float fireRate = 0.5F;
     private float nextFire = 0.0F;
 
-
+    [Header("Sphere Shake rate")]
+    public float shakeRate = 0.5F;
+    public float nextShake = 0.0F;
+    private Transform avatarTarget;
     void Start()
     {
         anim = anim.GetComponent<Animator>();
@@ -42,15 +46,26 @@ public class AI : MonoBehaviour
 
         patrol_positions = GameObject.FindGameObjectsWithTag("patrol");
         //AUTO SETUP TARGET
-        if(target == null)
+        if (target == null)
         {
             GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
             target = playerGO.GetComponent<Transform>();
         }
+
+
+
+        #region ADD SPHERE SETUP 
+        shakeRate = 0.1F;
+        avatarTarget = transform.Find("Avatar");
+        if(avatarTarget != null)
+        {
+            avatarTarget.gameObject.AddComponent<SphereCollider>();
+            avatarTarget.gameObject.GetComponent<SphereCollider>().isTrigger = true;
+            Vector3 centerSetting = new Vector3(0, 1, 0);
+            avatarTarget.gameObject.GetComponent<SphereCollider>().center = new Vector3(0, 1, 0);
+        }
+        #endregion
     }
-
-  
-
 
 
     void Raycast()
@@ -76,6 +91,18 @@ public class AI : MonoBehaviour
         }
     }
 
+
+    //USE THIS TO MAKE TRIGGER WORKS
+    void ShakeTheSphere()
+    {
+        if(avatarTarget != null)
+        if(Time.time > nextShake)
+        {
+            avatarTarget.gameObject.GetComponent<SphereCollider>().radius = Random.Range(0.1f, 1.5f);
+            nextShake = Time.time + shakeRate;
+        }
+    }
+
     public void ChangeToBlack()
     {
         GetComponent<MeshRenderer>().material.color = Color.black;
@@ -83,7 +110,7 @@ public class AI : MonoBehaviour
 
     void Update()
     {
-
+        ShakeTheSphere();
         Raycast();
 
 
@@ -92,7 +119,21 @@ public class AI : MonoBehaviour
         {
             distance = Vector3.Distance(transform.position, target.position);
 
-            if(distance < 5 && chasing == false && TimerEvent.instance.seconds_int != 0)
+            #region NEAR MARKER
+            if (distance < 2)
+            {
+                near = 1;
+            }
+
+            else
+            {
+                near = 0;
+            }
+            #endregion
+
+
+
+            if (distance < 5 && chasing == false && TimerEvent.instance.seconds_int != 0)
             {
                 GetComponent<MeshRenderer>().material.color = Color.blue;
                 chasing = true;
@@ -129,12 +170,12 @@ public class AI : MonoBehaviour
                 {
                   
 
+                    // DECREASE PLAYER SCORE
                     if(ScoreManager.instance.playerScore >= 1 && Time.time > nextFire)
                     {
                         ScoreManager.instance.playerScore--;
                         ScoreManager.instance.UpdateScore();
                         nextFire = Time.time + fireRate;
-                        
                     }
 
 
@@ -145,16 +186,16 @@ public class AI : MonoBehaviour
 
 
 
-                    //PLAYER LOSE
+                    //PLAYER LOSE OR
+                    //IF PLAYER DOES NOT HAVE ANY SCORE BUT NEAR CONTACT WITH AI
                     if (PlayerController.instance != null && 
                        PlayerController.instance.earnedGems == true &&
-                       ScoreManager.instance.playerScore == 0)
+                       ScoreManager.instance.playerScore == 0 ||
+                       ScoreManager.instance.playerScore == 0 && PlayerController.instance.earnedGems == false)
                     {
-                        PlayerController.instance.isPlayerLose = true;
-                        PlayerController.instance.smoke.SetActive(true);
-                        PlayerController.instance.smoke.GetComponent<Transform>().parent = null;
-                        PlayerController.instance.enabled = false;
-                        target = null;
+                        //MAKE SURE IT REPEATED TO CALL
+                         StartCoroutine(setEvent_GameOver(1));
+                        
                     }
 
                     
@@ -203,6 +244,16 @@ public class AI : MonoBehaviour
 
 
     #region IENUMERATOR
+    IEnumerator setEvent_GameOver(float value)
+    {
+        yield return new WaitForSeconds(value);
+        PlayerController.instance.isPlayerLose = true;
+        PlayerController.instance.smoke.SetActive(true);
+        PlayerController.instance.smoke.GetComponent<Transform>().parent = null;
+        PlayerController.instance.enabled = false;
+        target = null;
+    }
+    
     IEnumerator reset_chasing()
     {
         yield return new WaitForSeconds(Random.Range(5,10));

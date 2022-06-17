@@ -9,9 +9,11 @@ public class SoundManager : MonoBehaviour
     //0 - collect sound fx
     //1 - car running sound fx
     //2 -car idle sound fx
-    //3 - car explosion sound fx
+    //3 - punchshot01
+    //4 - punchshot02
 
-    //4 - when player lose
+
+
     //5 - when player win's
     //6 - button sound fx
 
@@ -22,7 +24,10 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound(int i)
     {
-      source[i].Play();
+      if(source[i] != null)
+      {
+            source[i].Play();
+      }
     }
 
     public void Stop(int i)

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,6 +23,11 @@ public class PlayerController : MonoBehaviour
     public GameObject[] gems;
     private GameObject[] enemies;
     public bool someAI_chasingPlayer;
+
+    [Header("Sound Rate")]
+    public float soundRate = 0.5F;
+    private float nextSound = 0.0F;
+
 
 
     private void Awake()
@@ -129,7 +134,7 @@ public class PlayerController : MonoBehaviour
                    if (enemy != null && enemy.GetComponent<AI>().chasing == true)
                    {
                       float dist = Vector3.Distance(transform.position, enemy.GetComponent<Transform>().position);
-                      if (dist > 3)
+                      if (dist > 5)
                       {
                         CarTransform.localEulerAngles = new Vector3(0, 180, 0);
                       }
