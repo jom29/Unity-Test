@@ -25,7 +25,6 @@ public class Points : MonoBehaviour
 
                 score_manager.playerScore += score;
                 score_manager.UpdateScore();
-
                 switch(gameObject.GetComponent<gemsID>().color)
                 {
                     case "red":

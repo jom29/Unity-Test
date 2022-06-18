@@ -9,6 +9,7 @@ namespace Indie.Pixel.Cameras
     {
 
         #region Variables
+        public Transform HealthPos;
         public Transform target;
         public float height = 10;
         public float distance = 20;
@@ -27,6 +28,7 @@ namespace Indie.Pixel.Cameras
         void Update()
         {
             HandleCamera();
+            HealthPos.rotation = HealthPos.rotation = Quaternion.LookRotation(HealthPos.position - Camera.main.transform.position);
         }
         #endregion
 

@@ -7,11 +7,36 @@ using System;
 
 public class EventTrigger : MonoBehaviour
 {
-    
+    #region VARIABLES
+    //------------------------------------------------------------------
+    [Tooltip("isPlayerLose (true or false)\nWait event (Win/Lose))")]
     public PlayerController player_script;
+    //=================================================================
+
+
+
+    //-----------------------------------------------------------------
+    [Tooltip("Enable eventPanel UI\nWhen Player Win or Lose The Round")]
     public GameObject eventPanel;
+    //=================================================================
+    
+
+
+    //------------------------------------------------------------------
+    [Tooltip("Display Info When \nPlayer Win or Lose The Round")]
     public Text eventText;
+    //=================================================================
+
+
+
+    //-----------------------------------------------------------------------------
+    [Tooltip("Disable some AI behavior\n and components When Player Win or Lose")]
     public GameObject[] enemies;
+    //=============================================================================
+    #endregion
+
+
+
 
     private void Start()
     {
@@ -29,6 +54,7 @@ public class EventTrigger : MonoBehaviour
     }
 
 
+    #region IENUMERATORS
     IEnumerator WhenPlayerWin()
     {
         yield return new WaitUntil(() => ScoreManager.instance.playerScore > 100 && SceneManager.GetActiveScene().name.Equals("SampleScene"));
@@ -111,5 +137,5 @@ public class EventTrigger : MonoBehaviour
         yield return new WaitForSeconds(2);
         SoundManager.instance.StopAllSounds();
     }
-
+    #endregion
 }
