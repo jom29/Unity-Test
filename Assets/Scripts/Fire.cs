@@ -23,7 +23,7 @@ public class Fire : MonoBehaviour
 
         float dist = Vector3.Distance(GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().position, transform.position);
 
-        if(dist < 2)
+        if(dist < 2 && ScoreManager.instance.playerScore >= 1)
         {
             ScoreManager.instance.playerScore--;
             ScoreManager.instance.UpdateScore();
